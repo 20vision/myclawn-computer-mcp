@@ -77,7 +77,7 @@
   {
     "name": "myclawn_desktop_activity",
     "title": "See what the computer is doing",
-    "description": "Shows the steps the MyClawn computer is taking right now and whether a task is still running. Use it to check on a long task or when the user asks how it is going.",
+    "description": "Shows the latest task's steps on the MyClawn computer (pages opened, clicks, notes along the way) and whether it is still running. Use it to check on a long task, after myclawn_desktop_run reported it is still working, or when the user asks how it is going. Read-only.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -109,7 +109,7 @@
   {
     "name": "myclawn_desktop_tasks",
     "title": "List past tasks",
-    "description": "Lists the tasks the MyClawn computer has run and how each one ended. Use it when the user asks what it did earlier or whether a job finished.",
+    "description": "Lists the tasks the MyClawn computer has run, newest first, with each task's title, when it last changed and its state (done, or still running). Use it when the user asks what the computer did earlier or whether a job finished. Read-only; returns an empty list when the computer is not set up or not running.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -138,7 +138,7 @@
   {
     "name": "myclawn_desktop_sent_mail",
     "title": "Read the email it sent",
-    "description": "Lists every email the MyClawn computer sent from its own address, read from the mail server's copy. Use it to confirm a message really went out, or to show the user what was sent.",
+    "description": "Lists every email the MyClawn computer sent from its own address, read from the mail server's copy (recipient, subject, time). Use it to confirm a message really went out, or to show the user what was sent. Read-only. state is ok, no_machine (no computer yet) or unavailable (the mail copy could not be read just now).",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -171,7 +171,7 @@
   {
     "name": "myclawn_desktop_interrupt",
     "title": "Stop the current task",
-    "description": "Stops whatever the MyClawn computer is doing right now. Use it when the user asks to stop, or a task is clearly going wrong.",
+    "description": "Stops the task the MyClawn computer is running right now. Use it when the user asks to stop, or a task is clearly going wrong. The task stops at its current step; anything it already did (an email sent, a form submitted) is not undone. Safe to call when nothing is running (interrupted is then false).",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -198,7 +198,7 @@
   {
     "name": "myclawn_desktop_send_file",
     "title": "Give the computer a file",
-    "description": "Puts a text file on the MyClawn computer's desktop so its agent can read or use all of it, for example a list of contacts, a draft, or data to enter. Use it instead of pasting long text into a task, then refer to the file by name in the task.",
+    "description": "Puts a text file on the MyClawn computer's desktop (/home/user/Desktop) so its agent can read or use all of it, for example a list of contacts, a draft, or data to enter. Use it instead of pasting long text into a task, then refer to the file by name in the task. A file with the same name is replaced. Text only, up to 2 MB. Returns the saved name and path; state is no_machine when the user has no computer yet.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -206,12 +206,14 @@
         "name": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 200
+          "maxLength": 120,
+          "description": "File name on the desktop, with an extension, e.g. contacts.csv. Characters other than letters, digits, dot, dash, underscore and space become _."
         },
         "content": {
           "type": "string",
           "minLength": 1,
-          "description": "File contents (text)"
+          "maxLength": 2000000,
+          "description": "The file's full text (UTF-8)"
         }
       },
       "required": [
@@ -231,6 +233,12 @@
       "type": "object",
       "properties": {
         "state": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "path": {
           "type": "string"
         }
       },
@@ -293,7 +301,7 @@
   {
     "name": "myclawn_notes_recall",
     "title": "Look up notes",
-    "description": "Search the notes saved in the user's MyClawn memory by keyword. Use it when the user refers to something they asked you to remember.",
+    "description": "Searches the notes saved in the user's MyClawn memory by keyword and returns up to 5 that share a word with the search, best match first (an empty list when nothing matches). Use it when the user refers to something they asked you to remember. Read-only.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -302,7 +310,7 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 200,
-          "description": "Keywords"
+          "description": "Words to look for, e.g. \"favorite airline\" or \"invoice address\""
         }
       },
       "required": [
@@ -347,7 +355,7 @@
   {
     "name": "myclawn_desktop_status",
     "title": "MyClawn computer status",
-    "description": "Shows whether the user has a MyClawn computer and plan, whether the machine is ready, and the computer's own email address. Use it before a first task, or when the user asks about their MyClawn setup.",
+    "description": "Shows the user's MyClawn plan, any free trial and its hours left, whether their computer is ready, and the computer's own email address. Use it when the user asks about their MyClawn setup, or after a task said the computer is still starting. Read-only; fields are null when there is no plan or computer yet.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
