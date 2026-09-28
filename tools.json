@@ -1,0 +1,468 @@
+[
+  {
+    "name": "myclawn_desktop_run",
+    "title": "Run a task on my MyClawn computer",
+    "description": "Hand a job to the user's own MyClawn computer, a cloud machine with an agent on it. Use it for what you cannot do from this chat: work inside websites and portals that need the user's login (the browser stays signed in between jobs), send and receive email from the computer's own address, fill in forms, download and edit files, and jobs that take longer than a chat reply or should keep going after the user leaves. Write the task the way you would brief a contractor: goal, details, and what to report back; include only what the task needs, not the conversation. Returns the agent's answer when it finishes, plus replay_url: a recording of the screen while it worked. Give the user that link so they can watch what their computer did. Big jobs can take several minutes. Uses the user's MyClawn plan.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "The task, in plain language, as you would brief a contractor over a screen share"
+        },
+        "private": {
+          "default": false,
+          "description": "Private mode: no memory is read or written for this turn",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "message"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true,
+      "title": "Run a task on my MyClawn computer"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "done",
+            "needs_plan",
+            "working"
+          ]
+        },
+        "reply": {
+          "type": "string"
+        },
+        "replay_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "screenshot_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replay_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "reply",
+        "replay_url",
+        "screenshot_url",
+        "replay_note"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "myclawn_desktop_activity",
+    "title": "See what the computer is doing",
+    "description": "Shows the steps the MyClawn computer is taking right now and whether a task is still running. Use it to check on a long task or when the user asks how it is going.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false,
+      "title": "See what the computer is doing"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {}
+        },
+        "running": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "steps"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  {
+    "name": "myclawn_desktop_tasks",
+    "title": "List past tasks",
+    "description": "Lists the tasks the MyClawn computer has run and how each one ended. Use it when the user asks what it did earlier or whether a job finished.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false,
+      "title": "List past tasks"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "tasks"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "myclawn_desktop_sent_mail",
+    "title": "Read the email it sent",
+    "description": "Lists every email the MyClawn computer sent from its own address, read from the mail server's copy. Use it to confirm a message really went out, or to show the user what was sent.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false,
+      "title": "Read the email it sent"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "state",
+        "messages"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  {
+    "name": "myclawn_desktop_interrupt",
+    "title": "Stop the current task",
+    "description": "Stops whatever the MyClawn computer is doing right now. Use it when the user asks to stop, or a task is clearly going wrong.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "title": "Stop the current task"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "interrupted": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": {}
+    }
+  },
+  {
+    "name": "myclawn_desktop_send_file",
+    "title": "Give the computer a file",
+    "description": "Puts a text file on the MyClawn computer's desktop so its agent can read or use all of it, for example a list of contacts, a draft, or data to enter. Use it instead of pasting long text into a task, then refer to the file by name in the task.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "description": "File contents (text)"
+        }
+      },
+      "required": [
+        "name",
+        "content"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "title": "Give the computer a file"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  {
+    "name": "myclawn_notes_remember",
+    "title": "Remember a note",
+    "description": "Save a note to the user's MyClawn memory, which their MyClawn computer and every assistant connected to it can use. Only when the user asks you to keep something (\"remember that\u2026\"). Never save conversation content on your own.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "The note, as one self-contained sentence"
+        },
+        "kind": {
+          "default": "note",
+          "description": "fact: something true about the user. preference: how they like things done. note: anything else.",
+          "type": "string",
+          "enum": [
+            "note",
+            "fact",
+            "preference"
+          ]
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "title": "Remember a note"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "saved": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "saved"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "myclawn_notes_recall",
+    "title": "Look up notes",
+    "description": "Search the notes saved in the user's MyClawn memory by keyword. Use it when the user refers to something they asked you to remember.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Keywords"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false,
+      "title": "Look up notes"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "notes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "myclawn_desktop_status",
+    "title": "MyClawn computer status",
+    "description": "Shows whether the user has a MyClawn computer and plan, whether the machine is ready, and the computer's own email address. Use it before a first task, or when the user asks about their MyClawn setup.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false,
+      "title": "MyClawn computer status"
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "plan": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "tier": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "current_period_end": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "tier",
+                "status",
+                "current_period_end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "machine": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "tier": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "tier"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trial": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean"
+                },
+                "hours_left": {
+                  "type": "number"
+                },
+                "ends_at": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "active",
+                "hours_left",
+                "ends_at"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "plan",
+        "machine",
+        "agent_email",
+        "account_email",
+        "trial"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

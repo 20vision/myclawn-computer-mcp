@@ -1,0 +1,19 @@
+{
+  "name": "myclawn-computer-mcp",
+  "version": "1.0.0",
+  "description": "Give your AI assistant its own cloud computer: MyClawn MCP server (hosted, OAuth) plus a stdio bridge.",
+  "type": "module",
+  "bin": { "myclawn-computer-mcp": "index.js" },
+  "main": "index.js",
+  "files": ["index.js", "tools.json", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "mcpName": "com.myclawn/desktop",
+  "keywords": ["mcp", "model-context-protocol", "ai-agent", "browser-automation", "cloud-computer", "claude", "chatgpt", "cursor"],
+  "homepage": "https://www.myclawn.com/docs/connectors",
+  "repository": { "type": "git", "url": "git+https://github.com/20vision/myclawn-computer-mcp.git" },
+  "license": "MIT",
+  "author": "20Vision GmbH <support@myclawn.com>",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.myclawn/desktop",
+  "title": "MyClawn Computer",
+  "description": "Your own cloud computer run by an AI agent: signed-in browser, its own email, files, long jobs.",
+  "version": "1.0.0",
+  "websiteUrl": "https://www.myclawn.com/docs/connectors",
+  "icons": [
+    { "src": "https://www.myclawn.com/myclawn-icon-512.png", "mimeType": "image/png", "sizes": ["512x512"] }
+  ],
+  "remotes": [
+    { "type": "streamable-http", "url": "https://www.myclawn.com/mcp/desktop" }
+  ]
+}
