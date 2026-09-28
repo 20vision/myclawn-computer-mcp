@@ -35,8 +35,8 @@ the way in if you do not have one yet.
 **Claude** (claude.ai, Claude Desktop, mobile): Settings, then Connectors, then Add custom
 connector. Paste `https://www.myclawn.com/mcp/desktop` and press Connect.
 
-**ChatGPT**: Settings, then Apps, then Advanced, and turn on developer mode. Create an app with
-the server URL above and OAuth as the authentication.
+**ChatGPT**: turn on developer mode under Settings, then Security and login. Then open Plugins,
+press + and choose Create app, with the server URL above and OAuth as the authentication.
 
 **Claude Code**:
 
