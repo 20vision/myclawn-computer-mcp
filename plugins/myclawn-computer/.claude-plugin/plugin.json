@@ -17,5 +17,8 @@
     "agent"
   ],
   "displayName": "MyClawn Computer",
-  "privacyPolicyUrl": "https://www.myclawn.com/privacy"
+  "privacyPolicyUrl": "https://www.myclawn.com/privacy",
+  "supportUrl": "https://www.myclawn.com/support",
+  "documentationUrl": "https://www.myclawn.com/docs/connectors",
+  "termsOfServiceUrl": "https://www.myclawn.com/terms"
 }
