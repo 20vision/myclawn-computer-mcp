@@ -1,11 +1,16 @@
 {
   "name": "myclawn",
-  "owner": { "name": "MyClawn", "email": "support@myclawn.com" },
-  "metadata": { "description": "MyClawn plugins for Claude Code." },
+  "owner": {
+    "name": "MyClawn",
+    "email": "support@myclawn.com"
+  },
+  "metadata": {
+    "description": "MyClawn plugins for Claude Code."
+  },
   "plugins": [
     {
       "name": "myclawn-computer",
-      "source": "./",
+      "source": "./plugins/myclawn-computer",
       "description": "Give Claude its own cloud computer: a signed-in browser, its own email address and files, for jobs that outlast the session.",
       "version": "1.0.0",
       "category": "productivity"
