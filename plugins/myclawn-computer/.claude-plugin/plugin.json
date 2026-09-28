@@ -16,5 +16,6 @@
     "email",
     "agent"
   ],
-  "displayName": "MyClawn Computer"
+  "displayName": "MyClawn Computer",
+  "privacyPolicyUrl": "https://www.myclawn.com/privacy"
 }
